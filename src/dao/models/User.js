@@ -2,43 +2,65 @@
 
 import mongoose from 'mongoose';
 
-const collection = 'Users';
+const userCollection = 'users';
 
-const schema = new mongoose.Schema({
-    first_name:{
+const userSchema = new mongoose.Schema({
+    first_name: {
         type: String,
-        required:true
+        required: true
     },
-    last_name:{
-        type:String,
-        required:true
+    last_name: {
+        type: String,
+        required: true
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
     role: {
-        type:String,
-        default:'user'
+        type: String,
+        default: 'user',
+        enum: ['user', 'admin'],
+        index: true
     },
-    pets:{
-        type:[
+    pets: {
+        type: [
             {
-                _id:{
-                    type:mongoose.SchemaTypes.ObjectId,
-                    ref:'Pets'
-                }
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'pets'
             }
         ],
-        default:[]
+        default: []
     }
-})
+}, {
+    timestamps: true,
+    strict: true,
+    collection: userCollection,
+    versionKey: false,
+    autoIndex: true
+});
 
-const userModel = mongoose.model(collection,schema);
+userSchema.index({ email: 1 }, { 
+    unique: true,
+    background: true,
+    name: 'email_index'
+});
+userSchema.index({ role: 1 });
+
+userSchema.post('save', function(error, doc, next) {
+    if (error.name === 'MongoServerError' && error.code === 11000) {
+        next(new Error('Email already exists'));
+    } else {
+        next(error);
+    }
+});
+
+const userModel = mongoose.model(userCollection, userSchema);
 
 export default userModel;

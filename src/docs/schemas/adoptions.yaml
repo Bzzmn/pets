@@ -1,0 +1,17 @@
+components:
+  schemas:
+    Adoption:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID único de la adopción
+        owner:
+          type: string
+          description: ID del usuario adoptante
+        pet:
+          type: string
+          description: ID de la mascota adoptada
+      required:
+        - owner
+        - pet 

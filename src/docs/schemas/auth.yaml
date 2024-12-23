@@ -1,0 +1,42 @@
+components:
+  schemas:
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          description: Contraseña del usuario
+          example: "********"
+      required:
+        - email
+        - password
+
+    UserToken:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre completo del usuario
+          example: John Doe
+        role:
+          type: string
+          enum: [user, admin]
+          description: Rol del usuario
+          example: user
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: user@example.com
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: coderCookie 

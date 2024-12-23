@@ -1,0 +1,88 @@
+paths:
+  /api/mocks/mockingpets:
+    get:
+      summary: Generar mascotas de prueba
+      tags: [Mocks]
+      parameters:
+        - in: query
+          name: num
+          schema:
+            type: integer
+            default: 100
+          description: Número de mascotas a generar
+      responses:
+        200:
+          description: Mascotas generadas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pet'
+
+  /api/mocks/mockingusers:
+    get:
+      summary: Generar usuarios de prueba
+      tags: [Mocks]
+      parameters:
+        - in: query
+          name: num
+          schema:
+            type: integer
+            default: 50
+          description: Número de usuarios a generar
+      responses:
+        200:
+          description: Usuarios generados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+
+  /api/mocks/generateData:
+    post:
+      summary: Generar datos de prueba y guardarlos en la base de datos
+      tags: [Mocks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                users:
+                  type: integer
+                  description: Número de usuarios a generar
+                  default: 0
+                pets:
+                  type: integer
+                  description: Número de mascotas a generar
+                  default: 0
+      responses:
+        200:
+          description: Datos generados y guardados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: "5 users and 10 pets inserted into the database" 

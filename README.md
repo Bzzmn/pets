@@ -1,106 +1,58 @@
-# Pets Adoption API
+# 🐾 API de Adopción de Mascotas
 
-A RESTful API for managing pet adoptions, built with Node.js, Express, and MongoDB.
+API RESTful para gestionar un sistema de adopción de mascotas, construida con Node.js, Express y MongoDB.
 
-## 🚀 Features
+## 🚀 Características
 
-- User authentication and authorization
-- Pet management (CRUD operations)
-- Adoption process handling
-- Mock data generation for testing
-- File uploads for pet images
-- JWT-based session management
+### Autenticación y Autorización
 
-## 📋 Prerequisites
+- JWT basado en cookies para autenticación segura
+- Roles de usuario (admin/user)
+- Protección de rutas sensibles
 
-- Node.js (v14 or higher)
-- MongoDB
-- npm or yarn
+### Gestión de Usuarios
 
-## 🛠️ Installation
+- CRUD completo de usuarios
+- Perfiles de usuario con mascotas adoptadas
+- Encriptación de contraseñas con bcrypt
 
-1. Clone the repository:
+### Gestión de Mascotas
 
-```bash
-git clone https://github.com/Bzzmn/pets-adoption-api.git
-cd pets-adoption-api
-```
+- CRUD completo de mascotas
+- Subida de imágenes
+- Estado de adopción
+- Múltiples especies soportadas
 
-2. Install dependencies:
+### Adopciones
 
-```bash
-npm install
-```
+- Sistema de adopción de mascotas
+- Validación de disponibilidad
+- Historial de adopciones
 
-3. Create a `.env` file in the root directory with your configuration:
+### Características Técnicas
 
-```bash
-env
-PORT=8080
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret
-```
+- Documentación OpenAPI/Swagger
+- Tests unitarios e integración
+- Pruebas de estrés con Artillery
+- Logging multinivel con Winston
+- Monitoreo de rendimiento
+- Dockerización completa
 
-## 🚦 Running the Application
+## 🛠️ Tecnologías
 
-Development mode:
+- Node.js 20
+- Express 4.18
+- MongoDB 6
+- Mongoose 6.7
+- JWT
+- Swagger/OpenAPI
+- Docker
+- Artillery
+- Winston
 
-```bash
-npm run dev
-```
-
-Production mode:
-
-```bash
-npm start
-```
-
-Run tests:
+## 📁 Estructura del Proyecto
 
 ```bash
-npm test
-```
-
-## 📚 API Documentation
-
-### Authentication Endpoints
-
-- `POST /api/sessions/register` - Register new user
-- `POST /api/sessions/login` - User login
-- `GET /api/sessions/current` - Get current user
-
-### Pets Endpoints
-
-- `GET /api/pets` - Get all pets
-- `POST /api/pets` - Create new pet
-- `POST /api/pets/withimage` - Create pet with image
-- `PUT /api/pets/:pid` - Update pet
-- `DELETE /api/pets/:pid` - Delete pet
-
-### Adoptions Endpoints
-
-- `GET /api/adoptions` - Get all adoptions
-- `GET /api/adoptions/:aid` - Get specific adoption
-- `POST /api/adoptions/:uid/:pid` - Create adoption
-
-### Mock Data Endpoints
-
-- `GET /api/mocks/mockingpets?num=100` - Generate 100 mock pets
-- `GET /api/mocks/mockingusers?num=50` - Generate 50 mock users
-- `POST /api/mocks/generateData` - Generate and save mock data to the database
-
-**To use the POST /api/mocks/generateData endpoint, you have to sent the request with a json fomat like this:**
-
-```json
-{
-  "numPets": 100,
-  "numUsers": 50
-}
-```
-
-## 🏗️ Project Structure
-
-```bach
 src/
 ├── controllers/ # Request handlers
 ├── dao/ # Data Access Objects
@@ -112,34 +64,188 @@ src/
 └── utils/ # Utility functions
 ```
 
-## 🔐 Security
+## 🔐 Seguridad
 
-The API implements several security measures:
+La API implementa varias medidas de seguridad:
 
-- Password hashing using bcrypt
-- JWT token authentication
-- Cookie-based session management
-- Role-based access control
+- Encriptación de contraseñas con bcrypt
+- Autenticación basada en JWT
+- Gestión de sesión basada en cookies
+- Control de acceso basado en roles
 
-## 📝 Error Handling
+## 📝 Manejo de Errores
 
-The API uses a centralized error handling system with predefined error messages for common scenarios such as:
+La API usa un sistema de manejo de errores centralizado con mensajes de error predefinidos para escenarios comunes como:
 
-- User not found
-- Pet not found
-- Incomplete values
-- User already exists
-- Incorrect password
-- Pet already adopted
+- Usuario no encontrado
+- Mascota no encontrada
+- Valores incompletos
+- Usuario ya existe
+- Contraseña incorrecta
+- Mascota ya adoptada
 
-## 🤝 Contributing
+## 🤝 Contribuciones
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Forkear el repositorio
+2. Crear su rama de característica (`git checkout -b feature/AmazingFeature`)
+3. Confirmar los cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Enviar a la rama (`git push origin feature/AmazingFeature`)
+5. Abrir una Solicitud de Extracción
 
-## 📄 License
+## 📄 Licencia
 
-This project is licensed under the ISC License.
+Este proyecto está licenciado bajo la Licencia ISC.
+
+## 🚦 API Endpoints
+
+### 👤 Usuarios
+
+- `GET /api/users` - Listar usuarios
+- `POST /api/users` - Crear usuario
+- `GET /api/users/:uid` - Obtener usuario
+- `PUT /api/users/:uid` - Actualizar usuario
+- `DELETE /api/users/:uid` - Eliminar usuario
+
+### 🐕 Mascotas
+
+- `GET /api/pets` - Listar mascotas
+- `POST /api/pets` - Crear mascota
+- `GET /api/pets/:pid` - Obtener mascota
+- `PUT /api/pets/:pid` - Actualizar mascota
+- `DELETE /api/pets/:pid` - Eliminar mascota
+
+### 🤝 Adopciones
+
+- `GET /api/adoptions` - Listar adopciones
+- `POST /api/adoptions` - Crear adopción
+- `GET /api/adoptions/:aid` - Obtener adopción
+
+### 🔐 Autenticación
+
+- `POST /api/sessions/login` - Iniciar sesión
+- `POST /api/sessions/register` - Registrar usuario
+- `GET /api/sessions/current` - Usuario actual
+
+## 🏃‍♂️ Comenzando
+
+### Prerrequisitos
+
+- Node.js 20+
+- Docker
+- MongoDB
+- Make
+
+### Instalación
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/yourusername/pets-adoption-api.git
+cd pets-adoption-api
+```
+
+2. Instalar dependencias:
+
+```bash
+npm install
+```
+
+3. Configurar variables de entorno:
+
+```bash
+cp .env.example .env
+# Editar .env con tus valores
+```
+
+### 🔧 Desarrollo
+
+```bash
+# Modo desarrollo
+npm run dev
+
+# Tests
+make test
+
+# Tests de integración específicos
+npm run test:users
+npm run test:pets
+npm run test:adoptions
+npm run test:auth
+
+# Tests de estrés
+npm run test:stress
+```
+
+### 🐳 Docker
+
+```bash
+# Construir imagen
+make build
+
+# Desplegar a DockerHub
+make deploy
+
+# Limpiar recursos
+make clean
+```
+
+### 📚 Documentación
+
+La documentación de la API está disponible en:
+
+```
+http://localhost:8080/api-docs
+```
+
+## 🔍 Tests
+
+```bash
+# Ejecutar todos los tests
+make test
+
+# Tests unitarios
+make test-unit
+
+# Tests de integración
+make test-integration
+
+# Tests de estrés
+make test-stress
+```
+
+## 🚀 Despliegue
+
+1. Construir y publicar imagen:
+
+```bash
+make deploy
+```
+
+2. Ejecutar contenedor:
+
+```bash
+docker run -d \
+  --name pets-api \
+  -p 8080:8080 \
+  -e MONGODB_URI=your_mongodb_uri \
+  -e JWT_SECRET=your_jwt_secret \
+  alvaroacevedoing/pets-adoption-api
+```
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia ISC - ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## ✨ Contribuir
+
+1. Fork el proyecto
+2. Crear una rama (`git checkout -b feature/amazing-feature`)
+3. Commit los cambios (`git commit -m 'Add amazing feature'`)
+4. Push a la rama (`git push origin feature/amazing-feature`)
+5. Abrir un Pull Request
+
+## 🤝 Contacto
+
+Álvaro Acevedo - [@Bzzmn](https://github.com/Bzzmn)
+
+Link del proyecto: [https://github.com/Bzzmn/pets](https://github.com/Bzzmn/pet)

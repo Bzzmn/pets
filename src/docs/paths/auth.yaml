@@ -1,0 +1,63 @@
+paths:
+  /api/sessions/login:
+    post:
+      summary: Iniciar sesión
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        200:
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/Success'
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: coderCookie=token123...; Path=/; HttpOnly
+        401:
+          $ref: '#/components/responses/Error'
+
+  /api/sessions/register:
+    post:
+      summary: Registrar nuevo usuario
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        400:
+          $ref: '#/components/responses/Error'
+
+  /api/sessions/current:
+    get:
+      summary: Obtiene el usuario actual
+      tags: [Authentication]
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Información del usuario actual
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/UserToken'
+        401:
+          $ref: '#/components/responses/Error'

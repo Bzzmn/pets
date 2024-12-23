@@ -1,13 +1,31 @@
 // src/services/index.js
 
-import Users from "../dao/Users.dao.js";
-import Pet from "../dao/Pets.dao.js";
-import Adoption from "../dao/Adoption.js";
+import UserRepository from '../repository/UserRepository.js';
+import PetRepository from '../repository/PetRepository.js';
+import AdoptionRepository from '../repository/AdoptionRepository.js';
+import User from '../dao/User.dao.js';
+import Pet from '../dao/Pets.dao.js';
+import Adoption from '../dao/Adoptions.dao.js';
 
-import UserRepository from "../repository/UserRepository.js";
-import PetRepository from "../repository/PetRepository.js";
-import AdoptionRepository from "../repository/AdoptionRepository.js";
+// Instanciar DAOs
+const userDao = new User();
+const petDao = new Pet();
+const adoptionDao = new Adoption();
 
-export const usersService = new UserRepository(new Users());
-export const petsService = new PetRepository(new Pet());
-export const adoptionsService = new AdoptionRepository(new Adoption());
+// Instanciar Repositories con sus respectivos DAOs
+const userRepository = new UserRepository(userDao);
+const petRepository = new PetRepository(petDao);
+const adoptionRepository = new AdoptionRepository(adoptionDao);
+
+// Exportar los repositories como servicios
+export const usersService = {
+    getUsers: () => userRepository.getUsers(),
+    getUserById: (id) => userRepository.getUserById(id),
+    getUserByEmail: (email) => userRepository.getUserByEmail(email),
+    create: (userData) => userRepository.create(userData),
+    update: (id, userData) => userRepository.update(id, userData),
+    delete: (id) => userRepository.delete(id)
+};
+
+export const petsService = petRepository;
+export const adoptionsService = adoptionRepository;

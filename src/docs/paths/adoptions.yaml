@@ -1,0 +1,109 @@
+paths:
+  /api/adoptions:
+    get:
+      summary: Listar todas las adopciones
+      tags: [Adoptions]
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Lista de adopciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Adoption'
+        401:
+          $ref: '#/components/responses/Error'
+
+  /api/adoptions/{aid}:
+    get:
+      summary: Ver adopción específica
+      tags: [Adoptions]
+      parameters:
+        - in: path
+          name: aid
+          required: true
+          schema:
+            type: string
+          description: ID de la adopción
+      responses:
+        200:
+          description: Adopción encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Adoption'
+        404:
+          $ref: '#/components/responses/Error'
+
+  /api/adoptions/{uid}/{pid}:
+    post:
+      summary: Crear nueva adopción
+      tags: [Adoptions]
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          schema:
+            type: string
+          description: ID del usuario adoptante
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID de la mascota a adoptar
+      responses:
+        200:
+          description: Adopción creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Pet adopted
+        400:
+          description: Error en la adopción
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Pet is already adopted
+        404:
+          description: Usuario o mascota no encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: User or pet not found 

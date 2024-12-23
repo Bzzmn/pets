@@ -1,0 +1,32 @@
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID único de la mascota
+        name:
+          type: string
+          description: Nombre de la mascota
+        specie:
+          type: string
+          description: Especie de la mascota
+          enum: [Dog, Cat, Bird, Hamster, Rabbit]
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de nacimiento
+        adopted:
+          type: boolean
+          description: Estado de adopción
+        owner:
+          type: string
+          description: ID del dueño (si está adoptada)
+        image:
+          type: string
+          description: URL de la imagen
+      required:
+        - name
+        - specie
+        - birthDate 

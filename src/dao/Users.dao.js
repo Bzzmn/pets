@@ -2,7 +2,6 @@
 
 import userModel from "./models/User.js";
 
-
 export default class Users {
     
     get = (params) =>{
@@ -13,7 +12,7 @@ export default class Users {
         return userModel.findOne(params);
     }
 
-    save = (doc) =>{
+    create = (doc) =>{
         return userModel.create(doc);
     }
 

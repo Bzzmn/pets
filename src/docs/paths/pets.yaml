@@ -1,0 +1,179 @@
+paths:
+  /api/pets:
+    get:
+      summary: Obtener todas las mascotas
+      tags: [Pets]
+      responses:
+        200:
+          description: Lista de mascotas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pet'
+        500:
+          $ref: '#/components/responses/Error'
+
+    post:
+      summary: Crear una nueva mascota
+      tags: [Pets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Max"
+                specie:
+                  type: string
+                  enum: [Dog, Cat, Bird, Hamster, Rabbit]
+                  example: "Dog"
+                birthDate:
+                  type: string
+                  format: date
+                  example: "2020-01-01"
+              required:
+                - name
+                - specie
+                - birthDate
+      responses:
+        200:
+          description: Mascota creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Pet'
+        400:
+          description: Error en los datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Invalid pet species
+
+  /api/pets/withimage:
+    post:
+      summary: Crear una mascota con imagen
+      tags: [Pets]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Max"
+                specie:
+                  type: string
+                  enum: [Dog, Cat, Bird, Hamster, Rabbit]
+                birthDate:
+                  type: string
+                  format: date
+                image:
+                  type: string
+                  format: binary
+              required:
+                - name
+                - specie
+                - birthDate
+                - image
+      responses:
+        200:
+          description: Mascota creada con imagen
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Pet'
+        400:
+          $ref: '#/components/responses/Error'
+
+  /api/pets/{pid}:
+    put:
+      summary: Actualizar mascota
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID de la mascota
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        200:
+          description: Mascota actualizada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: pet updated
+        404:
+          $ref: '#/components/responses/Error'
+
+    delete:
+      summary: Eliminar mascota
+      tags: [Pets]
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          schema:
+            type: string
+          description: ID de la mascota
+      responses:
+        200:
+          description: Mascota eliminada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: pet deleted
+        404:
+          $ref: '#/components/responses/Error' 

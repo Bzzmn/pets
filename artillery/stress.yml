@@ -1,0 +1,99 @@
+config:
+  target: "http://localhost:8080"
+  http:
+    timeout: 60
+    pool: 20
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      name: "Warm up"
+    - duration: 30
+      arrivalRate: 2
+      rampTo: 5
+      name: "Ramp up load"
+    - duration: 60
+      arrivalRate: 5
+      name: "Sustained load"
+  plugins:
+    metrics-by-endpoint: {}
+  processor: "./functions.cjs"
+  ensure:
+    maxErrorRate: 5
+    max: 95
+
+before:
+  flow:
+    - function: "setJSONBody"
+    - think: 2
+    - post:
+        url: "/api/sessions/login"
+        json:
+          email: "admin@test.com"
+          password: "test123"
+        capture:
+          - header: "set-cookie"
+            as: "authCookie"
+        expect:
+          - statusCode: 200
+          - hasHeader: "set-cookie"
+    - think: 2
+    - function: "setAuthHeader"
+
+scenarios:
+  - name: "Pet adoption flow"
+    weight: 40
+    flow:
+      - get:
+          url: "/api/pets"
+          headers:
+            Cookie: "{{ authCookie }}"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/mocks/mockingpets?num=3"
+          headers:
+            Cookie: "{{ authCookie }}"
+          expect:
+            - statusCode: 200
+      - post:
+          url: "/api/adoptions/{{ $randomString() }}/{{ $randomString() }}"
+          headers:
+            Cookie: "{{ authCookie }}"
+          expect:
+            - statusCode: 200
+
+  - name: "User registration flow"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/sessions/register"
+          json:
+            first_name: "{{ $randomString() }}"
+            last_name: "{{ $randomString() }}"
+            email: "{{ $randomString() }}@test.com"
+            password: "test123"
+          expect:
+            - statusCode: 200
+      - post:
+          url: "/api/sessions/login"
+          json:
+            email: "{{ $prevResponse.body.payload.email }}"
+            password: "test123"
+          expect:
+            - statusCode: 200
+
+  - name: "Mock data generation"
+    weight: 30
+    flow:
+      - get:
+          url: "/api/mocks/mockingusers?num=5"
+          headers:
+            Cookie: "{{ authCookie }}"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/mocks/mockingpets?num=5"
+          headers:
+            Cookie: "{{ authCookie }}"
+          expect:
+            - statusCode: 200
